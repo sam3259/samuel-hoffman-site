@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { ExternalLinkIcon } from "@/components/external-link-icon";
 import { mediaFrameStyle } from "@/components/media-sizing";
 import { ProjectGallery } from "@/components/project-gallery";
 import { ProjectVideoGallery } from "@/components/project-video-gallery";
@@ -77,7 +78,7 @@ export function ProjectMediaBlock({
       target="_blank"
     >
       <strong>{media.label}</strong>
-      <span aria-hidden="true">↗</span>
+      <ExternalLinkIcon />
     </a>
   );
 }

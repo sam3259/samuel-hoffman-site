@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { ExternalLinkIcon } from "@/components/external-link-icon";
 import { ProjectMediaBlock } from "@/components/project-media";
 import type { ProjectWithMedia } from "@/content/site";
 
@@ -198,7 +199,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {project.summaryLink.label} ↗
+                        {project.summaryLink.label} <ExternalLinkIcon />
                       </a>
                     </>
                   ) : null}

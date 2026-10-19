@@ -695,6 +695,14 @@ a.contact-row:focus-visible {
   text-underline-offset: 0.12em;
 }
 
+.external-link-icon {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  flex: none;
+  vertical-align: -0.06em;
+}
+
 .about-photos {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

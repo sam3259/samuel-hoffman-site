@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ContactList } from "@/components/contact-list";
+import { ExternalLinkIcon } from "@/components/external-link-icon";
 import { siteConfig } from "@/content/site";
 
 export const metadata = {
@@ -46,7 +47,7 @@ export default function AboutPage() {
             rel="noopener noreferrer"
           >
             <span>Resume</span>
-            <span aria-hidden="true">↗</span>
+            <ExternalLinkIcon />
           </a>
           <a
             href="/documents/sam-hoffman-coursework.pdf"
@@ -54,7 +55,7 @@ export default function AboutPage() {
             rel="noopener noreferrer"
           >
             <span>Coursework</span>
-            <span aria-hidden="true">↗</span>
+            <ExternalLinkIcon />
           </a>
         </nav>
         <div className="about-photos" aria-label="Photos of Sam at work">
