@@ -697,24 +697,22 @@ a.contact-row:focus-visible {
 
 .about-photos {
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(1rem, 3vw, 3rem);
-  align-items: start;
   margin-top: clamp(3rem, 8vw, 8rem);
 }
 
 .about-photos figure {
+  aspect-ratio: 4 / 3;
   margin: 0;
+  overflow: hidden;
 }
 
 .about-photos img {
   display: block;
   width: 100%;
-  height: auto;
-}
-
-.about-photo-testing {
-  padding-top: clamp(0rem, 7vw, 7rem);
+  height: 100%;
+  object-fit: cover;
 }
 
 .about-footer {
@@ -803,10 +801,6 @@ a.contact-row:focus-visible {
   .media-runway,
   .about-photos {
     grid-template-columns: 1fr;
-  }
-
-  .about-photo-testing {
-    padding-top: 0;
   }
 
   .project-document {

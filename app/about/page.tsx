@@ -58,22 +58,22 @@ export default function AboutPage() {
           </a>
         </nav>
         <div className="about-photos" aria-label="Photos of Sam at work">
-          <figure className="about-photo-testing">
+          <figure>
             <Image
               src="/media/about-me/testing.jpg"
               alt="Sam and a teammate working on a small jet engine in a test facility"
               width={4608}
               height={3456}
-              sizes="(max-width: 800px) 100vw, 42vw"
+              sizes="(max-width: 800px) 100vw, 48vw"
             />
           </figure>
-          <figure className="about-photo-presenting">
+          <figure>
             <Image
               src="/media/about-me/J1J09054.JPG"
               alt="Sam presenting an engineering project at a podium"
               width={2851}
               height={1901}
-              sizes="(max-width: 800px) 100vw, 52vw"
+              sizes="(max-width: 800px) 100vw, 48vw"
             />
           </figure>
         </div>
