@@ -1,0 +1,25 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next
+/out
+
+# production
+/build
+
+# local high-resolution source photography
+/source-assets
+
+# local tooling
+/.vercel
+/.DS_Store
+*.log
+
+# local environment files
+.env*
+!.env.example
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
