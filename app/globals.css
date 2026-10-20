@@ -373,6 +373,10 @@ a.contact-row:focus-visible {
   font-size: clamp(1rem, 1.65vw, 1.5rem);
 }
 
+.works > .works-end {
+  padding-bottom: 8rem;
+}
+
 .works-end a {
   width: 100%;
   border-top: 1px solid var(--rule);

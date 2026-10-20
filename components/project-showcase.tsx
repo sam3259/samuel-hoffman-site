@@ -15,10 +15,8 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   const [displayId, setDisplayId] = useState(projects[0]?.id ?? "");
   const [labelPhase, setLabelPhase] = useState<"idle" | "out" | "in">("idle");
   const [isVisible, setIsVisible] = useState(false);
-  const [isAtEnd, setIsAtEnd] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const regionRef = useRef<HTMLElement>(null);
-  const endRef = useRef<HTMLDivElement>(null);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const lastActiveIdRef = useRef(activeId);
@@ -78,28 +76,21 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
 
     projectElements.forEach((element) => projectObserver.observe(element));
 
-    const regionObserver = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0.01 },
-    );
+    const updateToolbarVisibility = () => {
+      const bounds = regionRef.current?.getBoundingClientRect();
+      setIsVisible(Boolean(bounds && bounds.top <= 0 && bounds.bottom > 0));
+    };
 
-    if (regionRef.current) {
-      regionObserver.observe(regionRef.current);
-    }
-
-    const endObserver = new IntersectionObserver(
-      ([entry]) => setIsAtEnd(entry.isIntersecting),
-      { threshold: 0.05 },
-    );
-
-    if (endRef.current) {
-      endObserver.observe(endRef.current);
-    }
+    updateToolbarVisibility();
+    window.addEventListener("scroll", updateToolbarVisibility, {
+      passive: true,
+    });
+    window.addEventListener("resize", updateToolbarVisibility);
 
     return () => {
       projectObserver.disconnect();
-      regionObserver.disconnect();
-      endObserver.disconnect();
+      window.removeEventListener("scroll", updateToolbarVisibility);
+      window.removeEventListener("resize", updateToolbarVisibility);
     };
   }, [projects]);
 
@@ -236,7 +227,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
         </article>
       ))}
 
-      <div className="works-end page-pad" ref={endRef}>
+      <div className="works-end page-pad">
         <a href="#top">
           <span>Back</span> <strong>to top</strong>{" "}
           <span aria-hidden="true">↑</span>
@@ -244,7 +235,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
       </div>
 
       <div
-        className={`project-toolbar ${isVisible && !isAtEnd ? "is-visible" : ""}`}
+        className={`project-toolbar ${isVisible ? "is-visible" : ""}`}
         aria-label="Project navigation"
       >
         <div className={`project-toolbar-active label-${labelPhase}`}>

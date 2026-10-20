@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { ExternalLinkIcon } from "@/components/external-link-icon";
+import { ProjectAutoplayVideo } from "@/components/project-autoplay-video";
 import { mediaFrameStyle } from "@/components/media-sizing";
 import { ProjectGallery } from "@/components/project-gallery";
 import { ProjectVideoGallery } from "@/components/project-video-gallery";
@@ -49,25 +50,7 @@ export function ProjectMediaBlock({
   }
 
   if (media.kind === "video") {
-    return (
-      <figure
-        className="project-media project-video"
-        style={mediaFrameStyle(media.video)}
-      >
-        <video
-          aria-label={media.video.label}
-          controls
-          playsInline
-          poster={media.video.poster || undefined}
-          preload="none"
-        >
-          <source src={media.video.src} type="video/mp4" />
-          Your browser does not support video playback.{" "}
-          <a href={media.video.src}>Open the video</a>.
-        </video>
-        <figcaption className="sr-only">{media.video.label}</figcaption>
-      </figure>
-    );
+    return <ProjectAutoplayVideo video={media.video} />;
   }
 
   return (
