@@ -2,8 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ContactList } from "@/components/contact-list";
+import { ExperienceTimeline } from "@/components/experience-timeline";
 import { ExternalLinkIcon } from "@/components/external-link-icon";
-import { siteConfig } from "@/content/site";
+import { SiteNavigation } from "@/components/site-navigation";
+import { projectShells, siteConfig } from "@/content/site";
 
 export const metadata = {
   title: "About Me",
@@ -18,6 +20,7 @@ export default function AboutPage() {
         <Link href="/#works">← Back to Works</Link>
         <span>{siteConfig.name}</span>
       </header>
+      <SiteNavigation projects={projectShells} currentPage="about" />
 
       <section className="about-shell page-pad" aria-labelledby="about-title">
         <p>Profile</p>
@@ -27,7 +30,8 @@ export default function AboutPage() {
             Hello, I’m Sam—a mechanical engineer who loves anything that flies.
             I’m especially drawn to aerospace, propulsion, and turning ideas
             into working hardware. With a BSE and MSE in mechanical engineering
-            from UPenn, I&apos;ll be working as a Propulsion Engineer at SpaceX.
+            from UPenn, I&apos;ll be working on Raptor at SpaceX as a Propulsion
+            Engineer.
           </p>
           <p>
             I’m a nimble problem solver who moves between analysis, prototyping,
@@ -58,6 +62,7 @@ export default function AboutPage() {
             <ExternalLinkIcon />
           </a>
         </nav>
+        <ExperienceTimeline />
         <div className="about-photos" aria-label="Photos of Sam at work">
           <figure>
             <Image

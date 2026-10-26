@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ExternalLinkIcon } from "@/components/external-link-icon";
 import { ProjectMediaBlock } from "@/components/project-media";
+import { SiteNavigation } from "@/components/site-navigation";
 import type { ProjectWithMedia } from "@/content/site";
 
 type ProjectShowcaseProps = {
@@ -15,10 +16,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   const [displayId, setDisplayId] = useState(projects[0]?.id ?? "");
   const [labelPhase, setLabelPhase] = useState<"idle" | "out" | "in">("idle");
   const [isVisible, setIsVisible] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const regionRef = useRef<HTMLElement>(null);
-  const menuTriggerRef = useRef<HTMLButtonElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
   const lastActiveIdRef = useRef(activeId);
 
   const activeIndex = Math.max(
@@ -94,11 +92,6 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
     };
   }, [projects]);
 
-  const closeMenu = useCallback(() => {
-    setIsMenuOpen(false);
-    window.requestAnimationFrame(() => menuTriggerRef.current?.focus());
-  }, []);
-
   const selectProject = (projectId: string) => {
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -106,7 +99,6 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
     const projectElement = document.getElementById(projectId);
     const projectHeading = projectElement?.querySelector<HTMLElement>("h2");
 
-    setIsMenuOpen(false);
     window.requestAnimationFrame(() => {
       projectElement?.scrollIntoView({
         behavior: reduceMotion ? "auto" : "smooth",
@@ -115,44 +107,6 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
       projectHeading?.focus({ preventScroll: true });
     });
   };
-
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
-      "a[href], button:not([disabled])",
-    );
-    focusable?.[0]?.focus();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeMenu();
-        return;
-      }
-
-      if (event.key !== "Tab" || !focusable?.length) return;
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [closeMenu, isMenuOpen]);
 
   const goToProject = (index: number) => {
     const targetId = index < 0 ? "top" : projects[index]?.id;
@@ -257,19 +211,12 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
           >
             ↑
           </button>
-          <button
-            className="project-index-trigger"
-            type="button"
-            ref={menuTriggerRef}
-            aria-expanded={isMenuOpen}
-            aria-controls="project-index-dialog"
-            aria-label="Open project index"
-            onClick={() => setIsMenuOpen(true)}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
+          <SiteNavigation
+            projects={projects}
+            currentPage="home"
+            activeProjectId={activeId}
+            onSelectProject={selectProject}
+          />
           <button
             className="project-step"
             type="button"
@@ -281,40 +228,6 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
           </button>
         </div>
       </div>
-
-      {isMenuOpen ? (
-        <div
-          className="project-index-overlay"
-          id="project-index-dialog"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="project-index-title"
-          ref={dialogRef}
-        >
-          <p id="project-index-title">Projects</p>
-          <nav aria-label="Project index">
-            {projects.map((project) => (
-              <a
-                href={`#${project.id}`}
-                key={project.id}
-                aria-current={project.id === activeId ? "location" : undefined}
-                onClick={(event) => {
-                  event.preventDefault();
-                  selectProject(project.id);
-                }}
-              >
-                <span>{project.title}</span>
-              </a>
-            ))}
-          </nav>
-          <button
-            className="project-index-close"
-            type="button"
-            aria-label="Close project index"
-            onClick={closeMenu}
-          />
-        </div>
-      ) : null}
     </section>
   );
 }

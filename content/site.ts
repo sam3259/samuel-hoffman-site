@@ -66,7 +66,7 @@ export const projectShells = [
     id: "rotating-detonation-rocket-engine",
     title: "Rotating Detonation Rocket Engine",
     summary:
-      "An independent student propulsion program designing, analyzing, manufacturing, and testing a rotating detonation rocket engine.",
+      "An independent student propulsion program designing, analyzing, manufacturing, and testing a rotating detonation rocket engine. Presented at the USSF University Consortium Symposium in June 2026.",
     summaryLink: {
       href: "https://projectwavefront.org",
       label: "projectwavefront.org",
