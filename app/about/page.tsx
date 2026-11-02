@@ -27,11 +27,9 @@ export default function AboutPage() {
         <h1 id="about-title">About Me</h1>
         <div className="about-copy">
           <p>
-            Hello, I’m Sam—a mechanical engineer who loves anything that flies.
-            I’m especially drawn to aerospace, propulsion, and turning ideas
-            into working hardware. With a BSE and MSE in mechanical engineering
-            from UPenn, I&apos;ll be working on Raptor at SpaceX as a Propulsion
-            Engineer.
+            Hello, I’m Sam— a mechanical engineer who loves anything that flies.
+            With a BSE and MSE in mechanical engineering from UPenn, I&apos;ll
+            be working on Raptor at SpaceX as a Propulsion Engineer.
           </p>
           <p>
             I’m a nimble problem solver who moves between analysis, prototyping,
