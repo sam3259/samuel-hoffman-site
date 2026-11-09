@@ -34,6 +34,7 @@ export type ProjectMedia =
       kind: "reel";
       id: string;
       images: readonly ProjectImage[];
+      videos?: readonly ProjectVideo[];
       frameAspectRatio?: number;
     }
   | { kind: "image"; id: string; image: ProjectImage }
@@ -64,14 +65,21 @@ export type ProjectWithMedia = ProjectShell & {
 export const projectShells = [
   {
     id: "rotating-detonation-rocket-engine",
-    title: "Rotating Detonation Rocket Engine",
+    title: "Rotating Detonation Rocket Engines",
     summary:
-      "An independent student propulsion program designing, analyzing, manufacturing, and testing a rotating detonation rocket engine. Presented at the USSF University Consortium Symposium in June 2026.",
+      "An independent student propulsion program designing, analyzing, manufacturing, and testing rotating detonation rocket engines. Our first engine fired 100 times in November 2026, reaching a maximum runtime of 10 seconds and becoming the longest-duration rotating detonation rocket engine ever fired by students. Presented at the USSF University Consortium Symposium in June 2026.",
     summaryLink: {
       href: "https://projectwavefront.org",
       label: "projectwavefront.org",
     },
-    excludedMedia: ["g2-1.png"],
+    excludedMedia: [
+      "g2-1.png",
+      "g2-2.png",
+      "g2-3.png",
+      "two-waves-short.mp4",
+      "firing.mp4",
+      "firing-poster.webp",
+    ],
     role: "Co-Founder & Propulsion Engineer",
     year: "2025—Present",
     tone: "graphite",

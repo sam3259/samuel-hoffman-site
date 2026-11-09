@@ -115,6 +115,42 @@ async function readProjectMedia(
     });
   }
 
+  if (project.id === "rotating-detonation-rocket-engine") {
+    media.push({
+      kind: "reel",
+      id: "g2",
+      frameAspectRatio: 1,
+      images: [
+        {
+          src: mediaUrl(project.mediaDirectory, "ethylene-side.gif"),
+          alt: "Mark I firing with ethylene on the test stand, viewed from the side",
+          ...(await imageDimensions(join(directoryPath, "ethylene-side.gif"))),
+        },
+        {
+          src: mediaUrl(project.mediaDirectory, "firing.gif"),
+          alt: "Mark I igniting and firing on the test stand",
+          ...(await imageDimensions(join(directoryPath, "firing.gif"))),
+        },
+      ],
+      videos: [
+        {
+          src: mediaUrl(project.mediaDirectory, "two-waves-short.mp4"),
+          poster: mediaUrl(project.mediaDirectory, "two-waves-poster.jpg"),
+          label: "Detonation waves in Mark I",
+          width: 216,
+          height: 256,
+        },
+        {
+          src: mediaUrl(project.mediaDirectory, "firing.mp4"),
+          poster: mediaUrl(project.mediaDirectory, "firing-poster.webp"),
+          label: "Short duration methane firing of Mark I",
+          width: 480,
+          height: 468,
+        },
+      ],
+    });
+  }
+
   for (const filename of singles) {
     media.push({
       kind: "image",

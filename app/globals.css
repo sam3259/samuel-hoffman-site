@@ -263,13 +263,19 @@ a.contact-row:focus-visible {
   max-width: 1280px;
 }
 
+.project-reel-mixed {
+  max-width: 900px;
+}
+
 .project-video,
-.project-video-reel {
+.project-video-reel,
+.project-reel-mixed {
   background: #111;
 }
 
 .project-video video,
-.project-video-reel video {
+.project-video-reel video,
+.project-reel-mixed video {
   display: block;
   width: 100%;
   height: 100%;
@@ -317,6 +323,10 @@ a.contact-row:focus-visible {
   right: auto;
   bottom: 4rem;
   left: 1rem;
+}
+
+.project-reel-playing-video .gallery-controls {
+  bottom: 4rem;
 }
 
 .gallery-controls button {

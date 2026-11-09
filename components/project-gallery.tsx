@@ -1,44 +1,89 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { mediaFrameStyle } from "@/components/media-sizing";
-import type { ProjectImage } from "@/content/site";
+import type { ProjectImage, ProjectVideo } from "@/content/site";
 
 type ProjectGalleryProps = {
   images: readonly ProjectImage[];
+  videos?: readonly ProjectVideo[];
   projectTitle: string;
   frameAspectRatio?: number;
 };
 
 export function ProjectGallery({
   images,
+  videos = [],
   projectTitle,
   frameAspectRatio,
 }: ProjectGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeImage = images[activeIndex];
+  const [isInView, setIsInView] = useState(false);
+  const items = [
+    ...images.map((image) => ({ kind: "image" as const, image })),
+    ...videos.map((video) => ({ kind: "video" as const, video })),
+  ];
+  const activeItem = items[activeIndex];
+  const frameRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
-  if (!activeImage) return null;
+  useEffect(() => {
+    if (!videos.length) return;
+    const frame = frameRef.current;
+    if (!frame) return;
 
-  const showControls = images.length > 1;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.intersectionRatio >= 0.25),
+      { threshold: [0, 0.25, 0.5] },
+    );
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, [videos.length]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (
+      !isInView ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      video.pause();
+      return;
+    }
+
+    void video.play().catch(() => {
+      // Native controls remain available if the browser blocks autoplay.
+    });
+
+    return () => video.pause();
+  }, [activeIndex, isInView]);
+
+  if (!activeItem) return null;
+
+  const showControls = items.length > 1;
+  const itemLabel = videos.length ? "Clip" : "Image";
   const changeImage = (direction: number) => {
     setActiveIndex(
-      (index) => (index + direction + images.length) % images.length,
+      (index) => (index + direction + items.length) % items.length,
     );
   };
 
   return (
     <figure
-      className={`project-media project-reel ${frameAspectRatio ? "project-reel-fixed" : ""}`}
+      ref={frameRef}
+      className={`project-media project-reel ${frameAspectRatio ? "project-reel-fixed" : ""} ${videos.length ? "project-reel-mixed" : ""} ${activeItem.kind === "video" ? "project-reel-playing-video" : ""}`}
       style={
         frameAspectRatio
           ? { aspectRatio: `${frameAspectRatio}`, width: "min(100%, 1280px)" }
-          : mediaFrameStyle(activeImage)
+          : mediaFrameStyle(
+              activeItem.kind === "image" ? activeItem.image : activeItem.video,
+            )
       }
-      aria-label={`${projectTitle} image reel`}
+      aria-label={`${projectTitle} ${videos.length ? "media" : "image"} reel`}
       aria-roledescription="carousel"
       onKeyDown={(event) => {
         if (event.key === "ArrowLeft") changeImage(-1);
@@ -66,44 +111,63 @@ export function ProjectGallery({
       }}
       tabIndex={showControls ? 0 : undefined}
     >
-      <Image
-        key={activeImage.src}
-        src={activeImage.src}
-        alt={activeImage.alt}
-        fill
-        sizes="(max-width: 800px) 100vw, 94vw"
-        style={{
-          objectFit: activeImage.crop ? "cover" : "contain",
-          objectPosition: activeImage.objectPosition,
-          transform: activeImage.zoom
-            ? `scale(${activeImage.zoom})`
-            : undefined,
-        }}
-      />
+      {activeItem.kind === "image" ? (
+        <Image
+          key={activeItem.image.src}
+          src={activeItem.image.src}
+          alt={activeItem.image.alt}
+          fill
+          sizes="(max-width: 800px) 100vw, 94vw"
+          unoptimized={activeItem.image.src.endsWith(".gif")}
+          style={{
+            objectFit: activeItem.image.crop ? "cover" : "contain",
+            objectPosition: activeItem.image.objectPosition,
+            transform: activeItem.image.zoom
+              ? `scale(${activeItem.image.zoom})`
+              : undefined,
+          }}
+        />
+      ) : (
+        <video
+          key={activeItem.video.src}
+          ref={videoRef}
+          aria-label={activeItem.video.label}
+          controls
+          loop
+          muted
+          playsInline
+          poster={activeItem.video.poster || undefined}
+          preload="metadata"
+        >
+          <source src={activeItem.video.src} type="video/mp4" />
+          Your browser does not support video playback.{" "}
+          <a href={activeItem.video.src}>Open the video</a>.
+        </video>
+      )}
       {showControls ? (
-        <div className="gallery-controls" aria-label="Image controls">
+        <div className="gallery-controls" aria-label={`${itemLabel} controls`}>
           <button
             type="button"
             onClick={() => changeImage(-1)}
-            aria-label={`Previous image in ${projectTitle} reel`}
+            aria-label={`Previous ${itemLabel.toLowerCase()} in ${projectTitle} reel`}
           >
             ←
           </button>
           <span className="gallery-progress" aria-hidden="true">
-            {images.map((image, index) => (
+            {items.map((item, index) => (
               <i
                 className={index === activeIndex ? "is-active" : ""}
-                key={image.src}
+                key={item.kind === "image" ? item.image.src : item.video.src}
               />
             ))}
           </span>
           <span className="sr-only" aria-live="polite">
-            Image {activeIndex + 1} of {images.length}
+            {itemLabel} {activeIndex + 1} of {items.length}
           </span>
           <button
             type="button"
             onClick={() => changeImage(1)}
-            aria-label={`Next image in ${projectTitle} reel`}
+            aria-label={`Next ${itemLabel.toLowerCase()} in ${projectTitle} reel`}
           >
             →
           </button>

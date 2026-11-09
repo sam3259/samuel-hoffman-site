@@ -28,6 +28,7 @@ The repository targets Node.js 22 in local version managers and CI.
 - Image reels sized to each photo's proportions, except the fixed-frame Maglev and final Navigator reels
 - Mouse, keyboard, and touch controls for reels
 - Browser-compatible MP4 videos with poster frames and native playback controls, including a two-video nozzle reel
+- RDRE firing reel with GIFs first, followed by two MP4 clips
 - Two photos and résumé/coursework downloads on the About Me page
 - IntersectionObserver-powered active-project navigator
 - About page with copy adapted from the previous portfolio
@@ -41,6 +42,7 @@ Edit project names, roles, years, and descriptions in `content/site.ts`. Put pro
 - `g1-1.jpg`, `g1-2.jpg`, etc. form one reel in numeric photo order. A different group number creates another reel; the group number does not imply chronology.
 - Other JPG, PNG, WebP, and AVIF files appear individually.
 - MP4 files appear with playback controls. A matching `video-name-poster.jpg` supplies the preview frame and proportions. The nozzle videos share a reel.
+- The RDRE firing reel is assembled explicitly in `content/media.ts` so its GIFs appear before its MP4 clips.
 - PDFs appear as document links.
 
 The browser uses converted JPEGs for HEIC photos and MP4s for the original MOV clips. Original captures and full-resolution masters are kept locally under the Git-ignored `source-assets` folder; the web-ready versions in `public/media` are the files that deploy. The About Me images are currently referenced directly from `app/about/page.tsx`.

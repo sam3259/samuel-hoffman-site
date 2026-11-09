@@ -20,6 +20,7 @@ export function ProjectMediaBlock({
     return (
       <ProjectGallery
         images={media.images}
+        videos={media.videos}
         projectTitle={projectTitle}
         frameAspectRatio={media.frameAspectRatio}
       />
